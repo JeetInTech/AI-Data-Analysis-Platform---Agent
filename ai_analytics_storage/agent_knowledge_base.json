@@ -1,0 +1,390 @@
+{
+  "successful_strategies": {
+    "Data Analysis": [
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure",
+      "Essential for understanding data structure"
+    ],
+    "Standard Data Cleaning": [
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (94.6) - standard cleaning sufficient",
+      "Moderate quality (94.6) - standard cleaning sufficient",
+      "Moderate quality (94.6) - standard cleaning sufficient",
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (94.1) - standard cleaning sufficient",
+      "Moderate quality (97.7) - standard cleaning sufficient"
+    ],
+    "Categorical Feature Engineering": [
+      "High categorical ratio (50.0%)",
+      "High categorical ratio (52.6%)",
+      "High categorical ratio (52.6%)",
+      "High categorical ratio (52.6%)",
+      "High categorical ratio (50.0%)",
+      "High categorical ratio (50.0%)",
+      "High categorical ratio (50.0%)",
+      "High categorical ratio (50.0%)",
+      "High categorical ratio (50.0%)",
+      "High categorical ratio (50.0%)"
+    ],
+    "Numerical Feature Engineering": [
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (9 columns)",
+      "Rich numerical data (9 columns)",
+      "Rich numerical data (9 columns)",
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (10 columns)",
+      "Rich numerical data (32 columns)"
+    ],
+    "Model Training": [
+      "Fast algorithms (LightGBM, Linear Models) for large dataset",
+      "Fast algorithms (LightGBM, Linear Models) for large dataset",
+      "Fast algorithms (LightGBM, Linear Models) for large dataset",
+      "Fast algorithms (LightGBM, Linear Models) for large dataset",
+      "Fast algorithms (LightGBM, Linear Models) for large dataset",
+      "Full suite of algorithms with cross-validation"
+    ],
+    "Model Evaluation": [
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment",
+      "Required for performance assessment"
+    ],
+    "Essential Visualization": [
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations",
+      "Large dataset - focus on key visualizations"
+    ],
+    "Results Export": [
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts",
+      "Save outputs and artifacts"
+    ]
+  },
+  "failed_strategies": {},
+  "dataset_profiles": [
+    {
+      "timestamp": "2025-11-03T15:26:21.370616",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T15:37:13.915999",
+      "profile": {
+        "shape": [
+          93800,
+          19
+        ],
+        "size_category": "large",
+        "n_numeric": 9,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.16120020199753113,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 63.40113639831543,
+        "column_type_ratio": {
+          "numeric": 0.47368421052631576,
+          "categorical": 0.5263157894736842,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.62665993341562,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "target_encoding"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T15:51:01.234423",
+      "profile": {
+        "shape": [
+          93800,
+          19
+        ],
+        "size_category": "large",
+        "n_numeric": 9,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.16120020199753113,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 63.40113639831543,
+        "column_type_ratio": {
+          "numeric": 0.47368421052631576,
+          "categorical": 0.5263157894736842,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.62665993341562,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "target_encoding"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T15:51:18.881795",
+      "profile": {
+        "shape": [
+          93800,
+          19
+        ],
+        "size_category": "large",
+        "n_numeric": 9,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.16120020199753113,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 63.40113639831543,
+        "column_type_ratio": {
+          "numeric": 0.47368421052631576,
+          "categorical": 0.5263157894736842,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.62665993341562,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.125,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "target_encoding"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T16:01:09.796893",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T16:12:15.720431",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T17:17:24.261741",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T18:29:55.824408",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-03T19:32:59.653102",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    }
+  ],
+  "optimal_algorithms": {},
+  "processing_times": {}
+}
