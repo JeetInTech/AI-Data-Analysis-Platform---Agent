@@ -655,6 +655,136 @@ class EnhancedAIDataPlatform:
             self.agent_viz_mode = "Both 2D and 3D"
             messagebox.showinfo("Settings", "Agent settings reset to defaults")
     
+    def show_instruction_dialog(self) -> str:
+        """
+        Show dialog to get user instructions before agent starts.
+        Returns user instruction string or empty string.
+        """
+        instruction_window = tk.Toplevel(self.root)
+        instruction_window.title("🤖 Agent Instructions")
+        instruction_window.geometry("700x600")
+        instruction_window.configure(bg="#2c3e50")
+        instruction_window.transient(self.root)
+        instruction_window.grab_set()
+        
+        user_input = {"text": ""}
+        
+        # Header
+        header_frame = ttk.Frame(instruction_window)
+        header_frame.pack(fill=tk.X, padx=20, pady=20)
+        
+        header_label = tk.Label(
+            header_frame,
+            text="📝 Provide Instructions to the Agent",
+            font=("Arial", 16, "bold"),
+            bg="#2c3e50",
+            fg="#ecf0f1"
+        )
+        header_label.pack()
+        
+        subtitle_label = tk.Label(
+            header_frame,
+            text="Tell the agent what you want it to do with your data",
+            font=("Arial", 10),
+            bg="#2c3e50",
+            fg="#95a5a6"
+        )
+        subtitle_label.pack(pady=(5, 0))
+        
+        # Examples frame
+        examples_frame = ttk.LabelFrame(instruction_window, text="💡 Example Instructions", padding=10)
+        examples_frame.pack(fill=tk.BOTH, padx=20, pady=(0, 10))
+        
+        examples_text = """Examples of what you can ask:
+
+📊 Data Filtering:
+  • "I only want house prices data"
+  • "Filter only real estate related columns"
+  • "Include only price, bedrooms, and location"
+
+🧹 Processing Options:
+  • "Just clean the data, no training"
+  • "Only prepare data for export"
+  • "Clean and show me correlations"
+
+🎯 Prediction Tasks:
+  • "Predict house prices"
+  • "Focus on predicting sales"
+  • "Train model for price estimation"
+
+📈 Analysis Focus:
+  • "Focus on correlation analysis"
+  • "Emphasize outlier detection"
+  • "Analyze distribution patterns"
+
+Or leave empty to let the agent decide automatically! 🤖"""
+        
+        examples_display = tk.Text(
+            examples_frame,
+            wrap=tk.WORD,
+            bg="#34495e",
+            fg="#ecf0f1",
+            font=("Consolas", 9),
+            height=15,
+            relief=tk.FLAT
+        )
+        examples_display.pack(fill=tk.BOTH, expand=True)
+        examples_display.insert("1.0", examples_text)
+        examples_display.config(state=tk.DISABLED)
+        
+        # Input frame
+        input_frame = ttk.LabelFrame(instruction_window, text="✍️ Your Instructions", padding=10)
+        input_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 10))
+        
+        instruction_text = tk.Text(
+            input_frame,
+            wrap=tk.WORD,
+            bg="#ecf0f1",
+            fg="#2c3e50",
+            font=("Arial", 11),
+            height=4
+        )
+        instruction_text.pack(fill=tk.BOTH, expand=True)
+        instruction_text.focus()
+        
+        # Buttons frame
+        button_frame = ttk.Frame(instruction_window)
+        button_frame.pack(fill=tk.X, padx=20, pady=(0, 20))
+        
+        def on_submit():
+            user_input["text"] = instruction_text.get("1.0", tk.END).strip()
+            instruction_window.destroy()
+        
+        def on_skip():
+            user_input["text"] = ""
+            instruction_window.destroy()
+        
+        submit_btn = ttk.Button(
+            button_frame,
+            text="✅ Submit Instructions",
+            command=on_submit
+        )
+        submit_btn.pack(side=tk.LEFT, padx=5)
+        
+        skip_btn = ttk.Button(
+            button_frame,
+            text="⏭️ Skip (Auto Mode)",
+            command=on_skip
+        )
+        skip_btn.pack(side=tk.LEFT, padx=5)
+        
+        cancel_btn = ttk.Button(
+            button_frame,
+            text="❌ Cancel",
+            command=instruction_window.destroy
+        )
+        cancel_btn.pack(side=tk.RIGHT, padx=5)
+        
+        # Wait for window to close
+        instruction_window.wait_window()
+        
+        return user_input["text"]
+    
     def show_agent_qa_interface(self):
         """Show interactive Q&A interface after agent completes."""
         qa_window = tk.Toplevel(self.root)

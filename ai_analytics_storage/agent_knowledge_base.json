@@ -92,6 +92,39 @@
       "Save outputs and artifacts",
       "Save outputs and artifacts",
       "Save outputs and artifacts"
+    ],
+    "Load Data": [
+      "Load dataset to begin processing",
+      "Load dataset to begin processing",
+      "Load dataset to begin processing",
+      "Load dataset to begin processing",
+      "Load dataset to begin processing",
+      "Load dataset to begin processing"
+    ],
+    "Clean Data": [
+      "Apply data cleaning based on dataset characteristics",
+      "Apply data cleaning based on dataset characteristics",
+      "Apply data cleaning based on dataset characteristics",
+      "Apply data cleaning based on dataset characteristics",
+      "Apply data cleaning based on dataset characteristics",
+      "Apply data cleaning based on dataset characteristics"
+    ],
+    "Visualize And Export": [
+      "Create visualizations and export results",
+      "Create visualizations and export results",
+      "Create visualizations and export results",
+      "Create visualizations and export results",
+      "Create visualizations and export results",
+      "Create visualizations and export results"
+    ],
+    "Feature Engineering": [
+      "Create features to improve model performance"
+    ],
+    "Train Models": [
+      "Train models to predict diagnosi"
+    ],
+    "Evaluate Models": [
+      "Assess model performance and select best model"
     ]
   },
   "failed_strategies": {},
@@ -380,6 +413,198 @@
       "success_rate": 1.0,
       "strategies_used": {
         "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-05T19:23:42.094738",
+      "profile": {
+        "shape": [
+          569,
+          33
+        ],
+        "size_category": "small",
+        "n_numeric": 32,
+        "n_categorical": 1,
+        "n_datetime": 0,
+        "missing_ratio": 0.030303030303030304,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 0.17051124572753906,
+        "column_type_ratio": {
+          "numeric": 0.9696969696969697,
+          "categorical": 0.030303030303030304,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 97.68785994762523,
+        "complexity": "low"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "simple_drop",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-05T19:29:22.235501",
+      "profile": {
+        "shape": [
+          1000,
+          6
+        ],
+        "size_category": "tiny",
+        "n_numeric": 5,
+        "n_categorical": 1,
+        "n_datetime": 0,
+        "missing_ratio": 0.0,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 0.0897674560546875,
+        "column_type_ratio": {
+          "numeric": 0.8333333333333334,
+          "categorical": 0.16666666666666666,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 99.50666666666666,
+        "complexity": "low"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "simple_drop",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-05T19:30:50.313311",
+      "profile": {
+        "shape": [
+          569,
+          33
+        ],
+        "size_category": "small",
+        "n_numeric": 32,
+        "n_categorical": 1,
+        "n_datetime": 0,
+        "missing_ratio": 0.030303030303030304,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 0.17051124572753906,
+        "column_type_ratio": {
+          "numeric": 0.9696969696969697,
+          "categorical": 0.030303030303030304,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 97.68785994762523,
+        "complexity": "low"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "simple_drop",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-05T19:32:34.673224",
+      "profile": {
+        "shape": [
+          569,
+          33
+        ],
+        "size_category": "small",
+        "n_numeric": 32,
+        "n_categorical": 1,
+        "n_datetime": 0,
+        "missing_ratio": 0.030303030303030304,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 0.17051124572753906,
+        "column_type_ratio": {
+          "numeric": 0.9696969696969697,
+          "categorical": 0.030303030303030304,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 97.68785994762523,
+        "complexity": "low"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "simple_drop",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-05T19:35:55.658952",
+      "profile": {
+        "shape": [
+          140700,
+          20
+        ],
+        "size_category": "large",
+        "n_numeric": 10,
+        "n_categorical": 10,
+        "n_datetime": 0,
+        "missing_ratio": 0.1531186922530206,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 96.18561267852783,
+        "column_type_ratio": {
+          "numeric": 0.5,
+          "categorical": 0.5,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 94.05454774523186,
+        "complexity": "moderate"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "smart_imputation",
+        "outliers": "keep_with_flag",
+        "encoding": "onehot_with_frequency"
+      }
+    },
+    {
+      "timestamp": "2025-11-05T19:56:19.844722",
+      "profile": {
+        "shape": [
+          569,
+          33
+        ],
+        "size_category": "small",
+        "n_numeric": 32,
+        "n_categorical": 1,
+        "n_datetime": 0,
+        "missing_ratio": 0.030303030303030304,
+        "duplicate_ratio": 0.0,
+        "memory_mb": 0.17051124572753906,
+        "column_type_ratio": {
+          "numeric": 0.9696969696969697,
+          "categorical": 0.030303030303030304,
+          "datetime": 0.0
+        },
+        "has_text_data": false,
+        "text_columns": 0,
+        "has_time_series": false,
+        "quality_score": 97.68785994762523,
+        "complexity": "low"
+      },
+      "success_rate": 1.0,
+      "strategies_used": {
+        "missing": "simple_drop",
         "outliers": "keep_with_flag",
         "encoding": "onehot_with_frequency"
       }

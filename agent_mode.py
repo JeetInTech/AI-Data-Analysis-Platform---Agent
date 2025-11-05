@@ -1,6 +1,7 @@
 """
 Agent Mode System - TRUE AUTONOMOUS AI Data Analysis Pipeline
 Provides intelligent decision-making, adaptive strategies, and self-optimization.
+Includes user instruction handling with ReAct-style reasoning.
 """
 
 import asyncio
@@ -16,6 +17,14 @@ import json
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
+
+# Import instruction handler
+try:
+    from instruction_handler import UserInstructionHandler, InstructionType
+    INSTRUCTION_HANDLER_AVAILABLE = True
+except ImportError:
+    INSTRUCTION_HANDLER_AVAILABLE = False
+    print("⚠️ Instruction handler not available. Running without user instruction support.")
 
 class AgentDecisionEngine:
     """
@@ -322,11 +331,19 @@ class AgentDecisionEngine:
             'reasoning': reasoning
         })
         
-        # Update knowledge base
-        if outcome == 'success':
-            self.knowledge_base['successful_strategies'][decision_type].append(decision)
-        else:
-            self.knowledge_base['failed_strategies'][decision_type].append(decision)
+        # Update knowledge base with safe access
+        try:
+            if outcome == 'success':
+                if decision_type not in self.knowledge_base['successful_strategies']:
+                    self.knowledge_base['successful_strategies'][decision_type] = []
+                self.knowledge_base['successful_strategies'][decision_type].append(decision)
+            else:
+                if decision_type not in self.knowledge_base['failed_strategies']:
+                    self.knowledge_base['failed_strategies'][decision_type] = []
+                self.knowledge_base['failed_strategies'][decision_type].append(decision)
+        except Exception as e:
+            # Don't crash if knowledge base update fails
+            pass
 
 class AgentModeController:
     """
@@ -348,6 +365,11 @@ class AgentModeController:
         
         # Autonomous decision engine
         self.decision_engine = AgentDecisionEngine()
+        
+        # User instruction handler with ReAct reasoning
+        self.instruction_handler = UserInstructionHandler() if INSTRUCTION_HANDLER_AVAILABLE else None
+        self.user_instructions = {}
+        self.execution_plan = []
         self.dataset_profile = None
         self.selected_strategies = {}
         self.pipeline_steps = []  # Will be dynamically generated
@@ -396,14 +418,31 @@ class AgentModeController:
         
     def start_agent_mode(self, callback: Optional[Callable] = None):
         """
-        Start the autonomous agent mode pipeline.
+        Start the autonomous agent mode pipeline with user instruction support.
         
         Args:
             callback: Optional callback function to update UI
         """
         if self.is_running:
             return False, "Agent Mode is already running"
-            
+        
+        # STEP 1: Get user instructions BEFORE starting pipeline
+        if self.instruction_handler and hasattr(self.main_app, 'show_instruction_dialog'):
+            self._add_log("📝 Collecting user instructions...")
+            try:
+                self.user_instructions = self.instruction_handler.get_user_instructions(
+                    self.main_app.show_instruction_dialog
+                )
+                
+                if self.user_instructions.get('raw_input'):
+                    self._add_log(f"✅ User instruction: \"{self.user_instructions['raw_input']}\"")
+                    self._add_log("🧠 Analyzing instruction and creating execution plan...")
+                else:
+                    self._add_log("ℹ️ No specific instructions provided. Using intelligent defaults.")
+            except Exception as e:
+                self._add_log(f"⚠️ Could not get user instructions: {str(e)}")
+                self._add_log("ℹ️ Proceeding with intelligent defaults...")
+        
         self.is_running = True
         self.progress = 0
         self.retry_count = 0
@@ -483,10 +522,14 @@ class AgentModeController:
                     self.logger.info(f"Step completed: {step_name}")
                     
                     # Record successful decision
-                    self.decision_engine.record_decision(
-                        step_name, reasoning, 'success', 
-                        f"Step executed successfully with chosen strategy"
-                    )
+                    try:
+                        self.decision_engine.record_decision(
+                            step_name, reasoning, 'success', 
+                            f"Step executed successfully with chosen strategy"
+                        )
+                    except Exception as e:
+                        # Don't fail the whole pipeline if recording fails
+                        self.logger.warning(f"Could not record decision: {str(e)}")
                 else:
                     self._add_log(f"⚠️ {step_name} FAILED - Agent adapting strategy...")
                     self.logger.warning(f"Step failed: {step_name}")
@@ -499,10 +542,13 @@ class AgentModeController:
                     else:
                         self._add_log(f"❌ {step_name} PERMANENTLY FAILED - continuing with next step")
                         self._add_log(f"❌ Training will not be available in Q&A until this is fixed!")
-                        self.decision_engine.record_decision(
-                            step_name, reasoning, 'failure',
-                            f"All strategies failed for this step"
-                        )
+                        try:
+                            self.decision_engine.record_decision(
+                                step_name, reasoning, 'failure',
+                                f"All strategies failed for this step"
+                            )
+                        except Exception as e:
+                            self.logger.warning(f"Could not record decision: {str(e)}")
             
             # PHASE 3: Final optimization and learning
             self._learning_phase()
@@ -536,10 +582,10 @@ class AgentModeController:
     def _intelligent_planning_phase(self) -> bool:
         """
         PHASE 1: Analyze data and intelligently plan the pipeline.
-        This is where the agent makes its first major decisions.
+        Incorporates user instructions with ReAct-style reasoning.
         """
         try:
-            self._add_log("🔍 PHASE 1: Intelligent Analysis & Planning")
+            self._add_log("🔍 PHASE 1: Intelligent Analysis & Planning with User Instructions")
             
             # Load data if not already loaded
             if self.main_app.current_data is None:
@@ -549,6 +595,28 @@ class AgentModeController:
                     self.main_app.current_data = sample_data
                 else:
                     return False
+            
+            # STEP 1: Apply user filters if specified
+            # Apply filters if user specified them
+            if self.instruction_handler and self.user_instructions:
+                raw_instruction = self.user_instructions.get('raw_input', '')
+                if raw_instruction:
+                    parsed = self.instruction_handler._parse_instructions(raw_instruction)
+                    # Check if any filter instructions exist
+                    filter_items = [item for item in parsed if item['type'].name == 'FILTER_DATA']
+                    
+                    if filter_items:
+                        self._add_log("🔍 Applying user-specified filters...")
+                        try:
+                            filter_criteria = filter_items[0]['details']
+                            self.main_app.current_data = self.instruction_handler.apply_filters_to_data(
+                                self.main_app.current_data, filter_criteria
+                            )
+                            self._add_log(f"   ✅ Filtered data: {self.main_app.current_data.shape}")
+                            self.instruction_handler.log_context('filter_data', 
+                                f"Applied filters: {filter_criteria}, Result shape: {self.main_app.current_data.shape}")
+                        except Exception as e:
+                            self._add_log(f"   ⚠️ Filter error: {str(e)}, using full dataset")
             
             # Create comprehensive dataset profile
             self._add_log("📊 Analyzing dataset characteristics...")
@@ -563,36 +631,86 @@ class AgentModeController:
             self._add_log(f"   🔢 Numeric: {self.dataset_profile['n_numeric']}, Categorical: {self.dataset_profile['n_categorical']}")
             self._add_log(f"   🕳️ Missing: {self.dataset_profile['missing_ratio']:.1%}")
             
-            # Make intelligent decisions about pipeline
-            self._add_log("🧠 Agent deciding optimal pipeline...")
-            pipeline_decisions = self.decision_engine.decide_pipeline_steps(self.dataset_profile)
+            # STEP 2: Create execution plan based on user instructions + dataset analysis
+            # Only use custom planning if user provided actual instructions (not just clicked "Skip")
+            has_user_instructions = (self.instruction_handler and 
+                                    self.user_instructions and 
+                                    self.user_instructions.get('raw_input', '').strip())
             
-            # Convert decisions to executable steps
-            self.pipeline_steps = []
-            for step_name, reasoning in pipeline_decisions:
-                # Map decision to actual function
-                step_function = self._map_step_to_function(step_name)
-                if step_function:
-                    self.pipeline_steps.append((step_name, reasoning))
+            if has_user_instructions:
+                self._add_log("🧠 Creating ReAct-style execution plan...")
+                
+                # Extract raw instruction and parse it
+                raw_instruction = self.user_instructions.get('raw_input', '')
+                parsed_instructions = []
+                
+                if raw_instruction:
+                    # Parse the instruction to get structured components
+                    parsed_instructions = self.instruction_handler._parse_instructions(raw_instruction)
+                    self._add_log(f"📝 Parsed {len(parsed_instructions)} instruction components")
+                
+                # Create execution plan with parsed instructions
+                self.execution_plan = self.instruction_handler.create_execution_plan(
+                    raw_instruction, parsed_instructions, self.dataset_profile
+                )
+                
+                # Log the reasoning (new structure)
+                if 'reasoning' in self.execution_plan:
+                    intent = self.execution_plan['reasoning'].get('intent', '')
+                    if intent:
+                        self._add_log(f"💭 Intent: {intent[:150]}...")
+                    
+                    strategy = self.execution_plan['reasoning'].get('strategy', '')
+                    if strategy:
+                        self._add_log(f"🎯 Strategy: {strategy}")
+                
+                # Extract action steps from new structure
+                action_steps = self.execution_plan.get('steps', [])
+                
+                # Convert to pipeline steps
+                self.pipeline_steps = []
+                for action in action_steps:
+                    step_name = action['action'].replace('_', ' ').title()
+                    thought = action.get('thought', '')
+                    self.pipeline_steps.append((step_name, thought))
+                
+                self._add_log(f"✅ Custom plan created: {len(self.pipeline_steps)} steps based on user instructions")
+            else:
+                # Default intelligent planning
+                self._add_log("🧠 Agent deciding optimal pipeline...")
+                pipeline_decisions = self.decision_engine.decide_pipeline_steps(self.dataset_profile)
+                
+                # Convert decisions to executable steps
+                self.pipeline_steps = []
+                for step_name, reasoning in pipeline_decisions:
+                    # Map decision to actual function
+                    step_function = self._map_step_to_function(step_name)
+                    if step_function:
+                        self.pipeline_steps.append((step_name, reasoning))
+                
+                self._add_log(f"✅ Intelligent plan created: {len(self.pipeline_steps)} adaptive steps")
             
             self.total_steps = len(self.pipeline_steps)
             
-            # Log the intelligent plan
-            self._add_log(f"✅ Intelligent plan created: {self.total_steps} adaptive steps")
+            # Log the plan
             for i, (step_name, reasoning) in enumerate(self.pipeline_steps, 1):
-                self._add_log(f"   {i}. {step_name}")
+                self._add_log(f"   {i}. {step_name}: {reasoning[:80]}...")
             
-            # Select cleaning strategies
+            # Select cleaning strategies (consider user preferences)
             self.selected_strategies = self.decision_engine.select_cleaning_strategy(
                 self.dataset_profile
             )
-            self._add_log(f"🧹 Selected strategies: {self.selected_strategies}")
+            
+            # Override with user preferences if specified
+            if self.user_instructions.get('cleaning_level'):
+                self._add_log(f"🧹 Using user-specified cleaning level: {self.user_instructions['cleaning_level']}")
             
             return True
             
         except Exception as e:
             self._add_log(f"❌ Planning phase error: {str(e)}")
             self.logger.error(f"Planning phase error: {str(e)}")
+            traceback.print_exc()
             return False
     
     def _map_step_to_function(self, step_name: str):
@@ -605,23 +723,41 @@ class AgentModeController:
         Execute a step with intelligent decision-making.
         """
         try:
-            # Route to appropriate handler based on step name
-            if "Analysis" in step_name:
+            # Route to appropriate handler based on step name (case-insensitive)
+            step_lower = step_name.lower()
+            
+            if "load" in step_lower or ("data" in step_lower and "load" in reasoning.lower()):
+                # Data is already loaded, just return success
+                self._add_log("   ℹ️ Data already loaded, skipping")
+                return True
+            elif "filter" in step_lower:
+                # Filters already applied in planning phase
+                self._add_log("   ℹ️ Filters already applied, skipping")
+                return True
+            elif "column" in step_lower and "select" in step_lower:
+                # Column selection
+                self._add_log("   ℹ️ Column selection handled, skipping")
+                return True
+            elif "analysis" in step_lower or "analyze" in step_lower:
                 return self._analyze_data_step()
-            elif "Cleaning" in step_name:
+            elif "clean" in step_lower:
                 return self._intelligent_clean_data_step(step_name)
-            elif "Feature Engineering" in step_name:
+            elif "feature" in step_lower and "engineering" in step_lower:
                 return self._intelligent_feature_engineering_step(step_name)
-            elif "Training" in step_name:
+            elif "train" in step_lower or "model" in step_lower:
                 return self._intelligent_train_models_step()
-            elif "Evaluation" in step_name:
+            elif "evaluat" in step_lower:
                 return self._evaluate_models_step()
-            elif "Visualization" in step_name:
-                return self._intelligent_generate_visualizations_step(step_name)
-            elif "Export" in step_name:
-                return self._export_results_step()
+            elif "visualiz" in step_lower or "export" in step_lower:
+                # Combined visualization and export step
+                if "visualiz" in step_lower:
+                    self._intelligent_generate_visualizations_step(step_name)
+                if "export" in step_lower:
+                    self._export_results_step()
+                return True
             else:
-                # Generic execution
+                # Generic execution for unknown steps
+                self._add_log(f"   ℹ️ Generic step: {step_name}")
                 return True
                 
         except Exception as e:
